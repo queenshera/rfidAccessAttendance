@@ -26,3 +26,6 @@ tr:nth-child(even) {
 div {
     text-align: start;
 }
+.center{
+    text-align: center !important;
+}

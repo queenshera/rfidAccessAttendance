@@ -1,6 +1,8 @@
 <h2>Access Controll & Attendance </h2>
 <div class="topnav">
-    <a href="index.php">Users Log</a>
+    <a href="index.php">Dashboard</a>
+    <a href="dailyLog.php?logDate=<?php echo date('Y-m-d'); ?>">Daily Log</a>
+    <a href="dailyTimesheet.php?logDate=<?php echo date('Y-m-d'); ?>">Daily Timesheet</a>
     <a href="manageUsers.php">Manage Users</a>
 
     <?php
