@@ -1,8 +1,8 @@
 <?php
 /* Database connection settings */
 $servername = "localhost";
-$username = "admin";		//put your phpmyadmin username.(default is "root")
-$password = "Qsit@1234";			//if your phpmyadmin has a password put it here.(default is "root")
+$username = "root";		//put your phpmyadmin username.(default is "root")
+$password = "";			//if your phpmyadmin has a password put it here.(default is "root")
 $dbname = "rfidDb";
 
 $conn = mysqli_connect($servername, $username, $password, $dbname);
@@ -16,6 +16,6 @@ $currentUrl =  isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https:/
 
 $currentUrl .= $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
-//date_default_timezone_set('Asia/Kolkata');
+date_default_timezone_set('Asia/Kolkata');
 ?>
 

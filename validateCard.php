@@ -29,7 +29,7 @@ if (isset($_GET['cardId'])) {
 
     $cardId = $_GET['cardId'];
 
-    $sql = "SELECT * FROM users WHERE cardId='" . $cardId . "'";
+    $sql = "SELECT * FROM users WHERE (tempCard='" . $cardId . "' or cardId='" . $cardId . "') and hasAccess='Yes';";
     $result = mysqli_query($conn, $sql);
 
     if (mysqli_num_rows($result) > 0) {

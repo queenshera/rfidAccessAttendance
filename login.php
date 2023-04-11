@@ -17,7 +17,7 @@ if( isset($_POST['username']) && isset($_POST['password']) )
 }
 
 function auth($username,$password){
-    if($username=='admin' && $password=='MyPassword123')
+    if($username=='admin' && $password=='password')
     {
         return true;
     }

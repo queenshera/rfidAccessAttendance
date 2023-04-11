@@ -14,12 +14,13 @@ if (isset($_POST['name']) && isset($_POST['mobile']) && isset($_POST['email']) &
     $email = $_POST['email'];
     $mobile = $_POST['mobile'];
     $cardId = $_POST['cardId'];
+    $tempCard = $_POST['tempCard'];
 
-    $sql = "SELECT * FROM users WHERE cardId='".$cardId."'";
+    $sql = "SELECT * FROM users WHERE cardId='".$cardId."' or tempCard='" . $cardId . "'";
     $result = mysqli_query($conn, $sql);
 
     if (mysqli_num_rows($result) <= 0) {
-        $sql = "INSERT INTO users (name, email,mobile,cardId) VALUES ('$name','$email','$mobile','$cardId')";
+        $sql = "INSERT INTO users (name, email,mobile,cardId,tempCard) VALUES ('$name','$email','$mobile','$cardId','$tempCard')";
         $result = mysqli_query($conn, $sql);
 
         setcookie('message','Card added successfully',time()+5);

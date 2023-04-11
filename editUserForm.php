@@ -11,7 +11,7 @@ require 'connectDB.php';
 <html>
 <head>
     <title>
-        Manage Users
+        Edit User
     </title>
     <style>
         body {
@@ -43,18 +43,37 @@ require 'connectDB.php';
     </style>
 </head>
 <body>
-<?php include 'header.php';?>
-<form style="position: absolute;" method="post" action="addUser.php">
+<?php
+include 'header.php';
+
+$id = $_GET['id'];
+
+$sql = "SELECT * FROM users WHERE id='" . $id . "'";
+$result = mysqli_query($conn, $sql);
+
+if (mysqli_num_rows($result) > 0) {
+    $result = mysqli_fetch_assoc($result);
+}
+?>
+
+<form style="position: absolute;" method="post" action="editUser.php">
+    <input type="text" id="id" name="id" value="<?php echo $result['id']; ?>" required hidden>
     <label for="name">Name :- </label>
-    <input type="text" id="name" name="name" value="" required><br><br>
+    <input type="text" id="name" name="name" value="<?php echo $result['name']; ?>" required><br><br>
     <label for="E-mail">E-mail :</label>
-    <input type="email" id="E-mail" name="email" value="" required><br><br>
+    <input type="email" id="E-mail" name="email" value="<?php echo $result['email']; ?>" required><br><br>
     <label for="Mobile No">Mobile:</label>
-    <input type="tel" id="Mobile No" name="mobile" value="" required><br><br>
+    <input type="tel" id="Mobile No" name="mobile" value="<?php echo $result['mobile']; ?>" required><br><br>
     <label for="cardId">Card Id:</label>
-    <input type="text" id="cardId" name="cardId" value="" required><br><br>
+    <input type="text" id="cardId" name="cardId" value="<?php echo $result['cardId']; ?>" required><br><br>
     <label for="tempCard">Temp Card:</label>
-    <input type="text" id="tempCard" name="tempCard" value=""><br><br>
+    <input type="text" id="tempCard" name="tempCard" value="<?php echo $result['tempCard']; ?>"><br><br>
+    <label for="hasAccess">Has Access:</label>
+    <select id="hasAccess" name="hasAccess" required style="width: 150px">
+		<option value="">Select</option>
+		<option value="Yes" <?php if($result['hasAccess'] == 'Yes') { echo 'selected'; } ?>>Yes</option>
+		<option value="No" <?php if($result['hasAccess'] == 'No') { echo 'selected'; } ?>>No</option>
+	</select><br><br>
     <button type="submit" id="submit">Submit</button>
     <button type="reset" id="reset" onclick="reset()">Reset</button>
 
@@ -83,7 +102,7 @@ require 'connectDB.php';
 
     while ($row = mysqli_fetch_assoc($result)) {?>
         <tr>
-			<td><a style="text-decoration: none;" href="viewUserTimesheet.php?userid=<?php echo $row["id"]; ?>"><?php echo $row["name"]; ?></a></td>
+			<td><a href="viewUserTimesheet.php?userid=<?php echo $row["id"]; ?>"><?php echo $row["name"]; ?></a></td>
             <td><?php echo $row["mobile"]; ?></td>
             <td><?php echo $row["email"]; ?></td>
             <td><?php echo $row["cardId"]; ?></td>

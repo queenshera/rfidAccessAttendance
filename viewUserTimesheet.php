@@ -1,10 +1,6 @@
 <?php
 session_start();
 session_regenerate_id();
-if (!isset($_SESSION['user']))      // if there is no valid session
-{
-    header("Location: login.html");
-}
 
 require 'connectDB.php';
 
@@ -14,32 +10,31 @@ require 'connectDB.php';
 	<title>
 		Daily Timesheet
 	</title>
-	<meta http-equiv="refresh" content="10">
 	<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <?php include "header.php"; ?>
-<div style="text-align:center;">
-	<form method="get" action="dailyTimesheet.php">
-		Date: <input type="date" name="logDate" required>
-		<input type="submit" value="submit">
-	</form>
-</div>
+<!--<div style="text-align:center;">
+    <form method="get" action="dailyTimesheet.php">
+        Date: <input type="date" name="logDate" required>
+        <input type="submit" value="submit">
+    </form>
+</div>-->
 <br>
 <table>
 	<tr>
 		<th>Name</th>
 		<th>Date</th>
-		<th>Office seating time</th>
+		<th>In-time</th>
+		<th>Seating time</th>
 		<th>Break time</th>
 		<th>Total Duration</th>
 		<th>Status</th>
 		<th>Action</th>
 	</tr>
     <?php
-    $logDate = $_GET["logDate"];
-    $logDate = date("Y-m-d", strtotime($logDate));
-    $sql = "SELECT users.name, users.cardId, user_daily_timesheet.* FROM user_daily_timesheet INNER JOIN users ON users.id=user_daily_timesheet.user_id WHERE user_daily_timesheet.logDate='" . $logDate . "';";
+    $userid = $_GET["userid"];
+    $sql = "SELECT users.name, users.cardId, user_daily_timesheet.* FROM user_daily_timesheet INNER JOIN users ON users.id=user_daily_timesheet.user_id WHERE user_daily_timesheet.user_id='" . $userid . "';";
     $result = mysqli_query($conn, $sql);
 
     while ($row = mysqli_fetch_assoc($result)) { ?>
@@ -48,7 +43,17 @@ require 'connectDB.php';
 			<td><?php echo $row["logDate"]; ?></td>
 			<td>
                 <?php
-                $sql2 = "SELECT * FROM user_logs WHERE user_id='" . $row['user_id'] . "' AND logDate='" . $logDate . "' AND outTime='NA';";
+                $sql3 = "SELECT * FROM user_logs WHERE user_id='" . $userid . "' AND logDate='" . $row['logDate'] . "' LIMIT 1;";
+                $result3 = mysqli_query($conn, $sql3);
+
+                while ($row1 = mysqli_fetch_assoc($result3)) {
+                    echo date('h:i:s a',$row1["inTime"]);
+                }
+                ?>
+			</td>
+			<td>
+                <?php
+                $sql2 = "SELECT * FROM user_logs WHERE user_id='" . $userid . "' AND logDate='" . $row['logDate'] . "' AND outTime='NA';";
                 $result2 = mysqli_query($conn, $sql2);
 
                 $sittingTime = $row["sittingTime"];
@@ -104,15 +109,12 @@ require 'connectDB.php';
 			</td>
 			<td>
                 <?php
-                if ($logDate == date('Y-m-d')) {
+                if ($rowCount > 0) {
                     ?>
-					<a href="validateCard.php?cardId=<?php echo $row["cardId"]; ?>&referer=<?php echo $currentUrl; ?>">Marking</a>
-                    <?php
-                } else if ($rowCount > 0) {
-                    ?>
-					<a href="validateCard.php?cardId=<?php echo $row["cardId"]; ?>&timestamp=<?php echo strtotime($row["logDate"] . ' 18:00:00'); ?>&referer=<?php echo $currentUrl; ?>">Marking</a>
+					<a href="validateCard.php?cardId=<?php echo $row["cardId"];  ?>&timestamp=<?php echo strtotime($row["logDate"].' 18:00:00'); ?>&referer=<?php echo $currentUrl; ?>">Marking</a>
                     <?php
                 }
+
                 ?>
 			</td>
 		</tr>
